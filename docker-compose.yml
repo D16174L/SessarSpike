@@ -1,0 +1,8 @@
+services:
+  expo-dev:
+    build:
+      dockerfile: ./Dockerfile
+    volumes:
+      - .:/workspace:cached
+volumes:
+  code: {}
