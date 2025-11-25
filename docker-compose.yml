@@ -3,5 +3,3 @@ services:
     image: sesarrspike:1.1
     volumes:
       - .:/workspace:cached
-volumes:
-  code: {}
