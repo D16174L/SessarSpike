@@ -1,7 +1,6 @@
 services:
   expo-dev:
-    build:
-      dockerfile: ./Dockerfile
+    image: sesarrspike:1.1
     volumes:
       - .:/workspace:cached
 volumes:
