@@ -1,1 +1,19 @@
+name: Build Android .apk
 
+run-name: "Building the .apk with the tag triggered by @${{ github.actor }}"
+
+permissions:
+  contents: write
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        
