@@ -36,7 +36,7 @@ RUN curl -fsSL https://get.pnpm.io/install.sh | sh - && \
 RUN git clone https://github.com/facebook/watchman.git /tmp/watchman \
     && cd /tmp/watchman \
     && git checkout v2025.11.24.00 \
-    && sudo ./install-system-packages.sh \
+    && ./install-system-packages.sh \
     && ./autogen.sh \
     && cd ${WORKDIR} \
     && rm -rf /tmp/watchman
