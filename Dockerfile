@@ -20,7 +20,6 @@ RUN mkdir -p ${WORKDIR} /root/.vscode-server/extensions \
     libtool \
     pkg-config \
     curl \
-    pnpm \
     python3 \
     g++ \
     make \
@@ -30,7 +29,8 @@ RUN mkdir -p ${WORKDIR} /root/.vscode-server/extensions \
     && rm -rf /var/lib/apt/lists/*
 
 # Install npm typescript expo ngrok (global dev tools)
-RUN pnpm install -g npm@10.8.1 typescript@5.5.3 expo@54.0.25 @expo/ngrok@4.1.3
+RUN curl -fsSL https://get.pnpm.io/install.sh | sh - && \
+    pnpm install -g npm@10.8.1 typescript@5.5.3 expo@54.0.25 @expo/ngrok@4.1.3
 
 RUN git clone https://github.com/facebook/watchman.git /tmp/watchman \
     && cd /tmp/watchman \
