@@ -26,6 +26,7 @@ RUN mkdir -p ${WORKDIR} /root/.vscode-server/extensions \
     openjdk-17-jdk \
     rustc \
     cargo \
+    libssl-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Install npm typescript expo ngrok (global dev tools)
