@@ -12,7 +12,7 @@ ENV SHELL="/bin/sh"
 
 # create workspace used by devcontainer/docker-compose and VS Code extensions
 RUN mkdir -p ${WORKDIR} /root/.vscode-server/extensions \
-    && apt update && apt install \
+    && apt update && apt install -y \
     git \
     build-essential \
     autoconf \
