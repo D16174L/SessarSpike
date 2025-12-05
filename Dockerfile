@@ -11,11 +11,47 @@ ENV ENV="/root/.shrc"
 ENV SHELL="/bin/sh"
 
 # create workspace used by devcontainer/docker-compose and VS Code extensions
-RUN mkdir -p ${WORKDIR} /root/.vscode-server/extensions \
-    && apt update && apt install -y git build-essential autoconf
-RUN apt update && apt install -y automake libtool pkg-config curl
-RUN apt update && apt install -y python3 g++ make openjdk-17-jdk
-RUN apt update && apt install -y libssl-dev 
+RUN mkdir -p ${WORKDIR} /root/.vscode-server/extensions 
+
+# Layer 1: heavy toolchains
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git build-essential g++ cmake \
+    && rm -rf /var/lib/apt/lists/*
+
+# Layer 2: compilers and large dev libs
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libboost-all-dev libclang-dev binutils-dev openjdk-17-jdk \
+    && rm -rf /var/lib/apt/lists/*
+
+# Layer 3: mid-size libraries
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libdouble-conversion-dev libdwarf-dev libevent-dev libfast-float-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Layer 4: gflags/glog/gtest/gmock
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgflags-dev libgoogle-glog-dev libgtest-dev libgmock-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Layer 5: compression libs
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    liblz4-dev liblzma-dev libzstd-dev zlib1g-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Layer 6: crypto/network libs
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libpcre2-dev libsnappy-dev libsodium-dev libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Layer 7: build helpers
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    autoconf automake libtool pkg-config \
+    && rm -rf /var/lib/apt/lists/*
+
+# Layer 8: misc utilities
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl ninja-build python3 python3-setuptools xxhash \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install npm typescript expo ngrok (global dev tools)
 RUN curl -fsSL https://get.pnpm.io/install.sh | sh - && \
@@ -32,11 +68,10 @@ RUN apt-get remove -y libfast-float-dev && \
     cd ${WORKDIR} &&  rm -rf /tmp/fast_float
 
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y && \
-    source $HOME/.cargo/env
+    . $HOME/.cargo/env
 
 RUN git clone https://github.com/facebook/watchman.git /tmp/watchman \
     && cd /tmp/watchman \
-    && ./install-system-packages.sh \
     && ./autogen.sh \
     && mkdir -p /usr/local/{bin,lib} /usr/local/var/run/watchman \
     && cd built && cp bin/* /usr/local/bin && cp lib/* /usr/local/lib \
