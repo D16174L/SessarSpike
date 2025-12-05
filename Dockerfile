@@ -15,7 +15,7 @@ RUN mkdir -p ${WORKDIR} /root/.vscode-server/extensions \
     && apt update && apt install -y git build-essential autoconf
 RUN apt update && apt install -y automake libtool pkg-config curl
 RUN apt update && apt install -y python3 g++ make openjdk-17-jdk
-RUN apt update && apt install -y openssl-dev 
+RUN apt update && apt install -y libssl-dev 
 
 # Install npm typescript expo ngrok (global dev tools)
 RUN curl -fsSL https://get.pnpm.io/install.sh | sh - && \
