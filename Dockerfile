@@ -68,7 +68,8 @@ RUN apt-get remove -y libfast-float-dev && \
     cd ${WORKDIR} &&  rm -rf /tmp/fast_float
 
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y && \
-    . $HOME/.cargo/env
+    . $HOME/.cargo/env && cargo --version && rustc --version
+ENV PATH="/root/.cargo/bin:${PATH}"
 
 RUN git clone https://github.com/facebook/watchman.git /tmp/watchman \
     && cd /tmp/watchman \
