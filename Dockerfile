@@ -1,14 +1,12 @@
 # [Choice] Node.js version: now using 24-LTS, using Alpine version for smaller footprint
-FROM localhost:5000/node:24-bookworm-slim
+FROM node:24-bookworm-slim
 
 ARG WORKDIR=/workspace
 # make the arg available as env (optional)
 ENV WORKDIR=${WORKDIR}
 
 ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-ENV ENV="/root/.shrc" 
-ENV SHELL="/bin/sh"
+ENV PATH="/pnpm:$PATH"
 
 # create workspace used by devcontainer/docker-compose and VS Code extensions
 RUN mkdir -p ${WORKDIR} /root/.vscode-server/extensions 
@@ -54,9 +52,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Install npm typescript expo ngrok (global dev tools)
-RUN curl -fsSL https://get.pnpm.io/install.sh | sh - && \
+RUN curl -fsSL https://get.pnpm.io/install.sh | ENV="$HOME/.shrc" SHELL="$(which sh)" sh - \
     && pnpm set-registry http://docker.host.internal:4873 \
-    pnpm install -g npm@10.8.1 typescript@5.5.3 expo@54.0.25 @expo/ngrok@4.1.3
+    && pnpm install -g npm@10.8.1 typescript@5.5.3 expo@54.0.25 @expo/ngrok@4.1.3
 
 # patch fast_float in order to be able to compile watchman
 RUN apt-get remove -y libfast-float-dev && \

@@ -1,5 +1,5 @@
 services:
   expo-dev:
-    image: sesarrspike:1.3
+    image: sesarrspike:1.4
     volumes:
       - .:/workspace:cached
