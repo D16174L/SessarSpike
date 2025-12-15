@@ -5,9 +5,6 @@ ARG WORKDIR=/workspace
 # make the arg available as env (optional)
 ENV WORKDIR=${WORKDIR}
 
-ENV PNPM_HOME="/pnpm"
-ENV PATH="/pnpm:$PATH"
-
 # create workspace used by devcontainer/docker-compose and VS Code extensions
 RUN mkdir -p ${WORKDIR} /root/.vscode-server/extensions 
 
@@ -52,7 +49,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Install npm typescript expo ngrok (global dev tools)
-RUN curl -fsSL https://get.pnpm.io/install.sh | ENV="$HOME/.shrc" SHELL="$(which sh)" sh - \
+RUN export PATH="/pnpm:$PATH" \
+    && curl -fsSL https://get.pnpm.io/install.sh | PNPM_HOME="/pnpm" ENV="$HOME/.shrc" SHELL="$(which sh)" sh - \
     && pnpm set-registry http://docker.host.internal:4873 \
     && pnpm install -g npm@10.8.1 typescript@5.5.3 expo@54.0.25 @expo/ngrok@4.1.3
 
